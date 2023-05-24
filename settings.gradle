@@ -1,1 +1,5 @@
 rootProject.name = 'voteDog'
+
+include 'voteDog-common'
+include 'voteDog-api'
+include 'voteDog-voteUpdate'

@@ -1,11 +1,30 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
-group = 'com.mardi2020'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+allprojects {
+    group = 'com.mardi2020'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '17'
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+subprojects {
+    apply plugin: 'java'
+    test {
+        useJUnitPlatform()
+    }
+
+    dependencyManagement {
+
+    }
 }
