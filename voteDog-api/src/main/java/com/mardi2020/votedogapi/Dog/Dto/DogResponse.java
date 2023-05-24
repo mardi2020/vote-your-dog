@@ -1,7 +1,7 @@
 package com.mardi2020.votedogapi.Dog.Dto;
 
 
-import com.mardi2020.votedogapi.Dog.Dogs;
+import com.mardi2020.votedogapi.Dog.Dog;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +18,7 @@ public class DogResponse {
         private String image;
         private int count;
 
-        public DogDetail(Dogs dog) {
+        public DogDetail(Dog dog) {
             this.dogId = dog.getDogId();
             this.name = dog.getName();
             this.description = dog.getDescription();
@@ -36,7 +36,7 @@ public class DogResponse {
         private String image;
         private int count;
 
-        public DogSimple(Dogs dog) {
+        public DogSimple(Dog dog) {
             this.dogId = dog.getDogId();
             this.name = dog.getName();
             this.description = dog.getDescription();

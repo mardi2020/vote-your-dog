@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Dogs {
+public class Dog {
 
     @Id
     @Field(value = "_id", targetType = FieldType.OBJECT_ID)
