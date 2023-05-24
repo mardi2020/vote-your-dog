@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      database: dog-vote
+  spring:
+    redis:
+      host: localhost
+      port: 6379
