@@ -9,6 +9,7 @@ import com.mardi2020.votedogcommon.Dog.Enum.VoteStatus;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseCookie;
@@ -20,12 +21,14 @@ public class DogService {
 
     private final DogMongoDBRepository dogRepository;
 
+    @Cacheable(value = "dog-detail", key = "#dogId", unless = "#result == null")
     public DogDetail findDog(Long dogId) {
         final Dog dog = dogRepository.findByDogId(dogId)
                 .orElseThrow();
         return new DogDetail(dog);
     }
 
+    @Cacheable(value = "dog-list", key = "'all'")
     public List<DogSimple> findDogs(Pageable pageable) {
         final Page<Dog> dogs = dogRepository.findAll(pageable);
         return dogs.stream().map(DogSimple::new)

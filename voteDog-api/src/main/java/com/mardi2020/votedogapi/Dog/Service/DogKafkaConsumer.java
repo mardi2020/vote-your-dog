@@ -11,6 +11,8 @@ import com.mardi2020.votedogcommon.Dog.Message.DogParam.DogInfo;
 import com.mardi2020.votedogcommon.Dog.Util.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class DogKafkaConsumer {
 
     private final DogMongoDBRepository dogRepository;
 
+    @CacheEvict(value = "dog-list", key = "'all'")
     @KafkaListener(topics = KafkaTopic.VOTE_AFTER)
     public void handleCount(String message) throws JsonProcessingException {
         log.info(message);
@@ -30,15 +33,16 @@ public class DogKafkaConsumer {
         final VoteStatus status = dogParam.getVoteStatus();
 
         updateDogCount(dogParam.getNewDog());
-        if (status.equals(VoteStatus.CANCEL)) {
+        if (status.equals(VoteStatus.ANOTHER)) {
             updateDogCount(dogParam.getBeforeDog());
         }
     }
 
-    private void updateDogCount(DogInfo dogInfo) {
+    @CachePut(value = "dog-detail", key = "#dogInfo.dogId")
+    public Dog updateDogCount(DogInfo dogInfo) {
         final Dog dog = dogRepository.findByDogId(dogInfo.getDogId())
                 .orElseThrow(DogNotFoundException::new);
         dog.updateCount(dogInfo.getCount());
-        dogRepository.save(dog);
+        return dogRepository.save(dog);
     }
 }
