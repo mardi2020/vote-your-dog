@@ -6,9 +6,11 @@ import com.mardi2020.votedogapi.Dog.Dto.DogResponse.DogSimple;
 import com.mardi2020.votedogapi.Dog.Repository.DogMongoDBRepository;
 import com.mardi2020.votedogapi.Util.CookieUtil;
 import com.mardi2020.votedogcommon.Dog.Enum.VoteStatus;
+import com.mardi2020.votedogcommon.Dog.Exception.DogNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,14 +19,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DogService {
 
     private final DogMongoDBRepository dogRepository;
 
     @Cacheable(value = "dog-detail", key = "#dogId", unless = "#result == null")
-    public DogDetail findDog(Long dogId) {
-        final Dog dog = dogRepository.findByDogId(dogId)
-                .orElseThrow();
+    public DogDetail findDogToDto(Long dogId) {
+        final Dog dog = findDog(dogId);
         return new DogDetail(dog);
     }
 
@@ -36,6 +38,8 @@ public class DogService {
     }
 
     public CookieWithFlag voteProcess(Long dogId, String cookieDogId) {
+        findDog(dogId);
+
         if (cookieDogId == null) {
             return new CookieWithFlag(VoteStatus.INIT,
                     CookieUtil.createCookie(dogId.toString()));
@@ -43,7 +47,15 @@ public class DogService {
         if (dogId.equals(Long.valueOf(cookieDogId))) {
             return new CookieWithFlag(VoteStatus.CANCEL, CookieUtil.removeCookie());
         }
-        return new CookieWithFlag(VoteStatus.ANOTHER, CookieUtil.createCookie(dogId.toString()));
+        return new CookieWithFlag(VoteStatus.ANOTHER,
+                CookieUtil.createCookie(dogId.toString()));
+    }
+
+    private Dog findDog(Long dogId) {
+        return dogRepository.findByDogId(dogId)
+                .orElseThrow(
+                        DogNotFoundException::new
+                );
     }
 
     public record CookieWithFlag(VoteStatus status, ResponseCookie cookie) {
