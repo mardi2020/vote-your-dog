@@ -1,9 +1,19 @@
 package com.mardi2020.votedogcommon.Dog.Exception;
 
+import lombok.Getter;
+
+@Getter
 public class DogNotFoundException extends RuntimeException {
-    private static final String MESSAGE = "NOT_FOUND_DOG";
+    private ErrorCode errorCode;
+
+    private static final String MESSAGE = "DOG_NOT_FOUND";
 
     public DogNotFoundException() {
         super(MESSAGE);
+    }
+
+    public DogNotFoundException(ErrorCode errorCode) {
+        super(MESSAGE);
+        this.errorCode = errorCode;
     }
 }
