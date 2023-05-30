@@ -27,7 +27,7 @@ public class DogController {
     @Operation(summary = "GET 강아지", description = "특정 id의 강아지 정보 가져오기")
     @GetMapping("/{dogId}")
     public ResponseEntity<?> dogDetails(@PathVariable Long dogId) {
-        final DogDetail dog = dogService.findDog(dogId);
+        final DogDetail dog = dogService.findDogToDto(dogId);
         return ResponseEntity.ok(dog);
     }
 
