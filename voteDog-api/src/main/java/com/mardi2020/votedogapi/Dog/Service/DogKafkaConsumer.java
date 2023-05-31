@@ -27,7 +27,7 @@ public class DogKafkaConsumer {
 
     @CacheEvict(value = "dog-list", key = "'all'")
     @KafkaListener(topics = KafkaTopic.VOTE_AFTER)
-    public void handleCount(String message) throws JsonProcessingException {
+    public void handleCount(final String message) throws JsonProcessingException {
         log.info(message);
         final DogParam dogParam = mapper.readValue(message, DogParam.class);
         final VoteStatus status = dogParam.getVoteStatus();
@@ -38,8 +38,8 @@ public class DogKafkaConsumer {
         }
     }
 
-    @CachePut(value = "dog-detail", key = "#dogInfo.dogId")
-    public Dog updateDogCount(DogInfo dogInfo) {
+    @CachePut(value = "dog-update", key = "#dogInfo.dogId")
+    public Dog updateDogCount(final DogInfo dogInfo) {
         final Dog dog = dogRepository.findByDogId(dogInfo.getDogId())
                 .orElseThrow(DogNotFoundException::new);
         dog.updateCount(dogInfo.getCount());
