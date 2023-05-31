@@ -26,14 +26,14 @@ public class DogController {
 
     @Operation(summary = "GET 강아지", description = "특정 id의 강아지 정보 가져오기")
     @GetMapping("/{dogId}")
-    public ResponseEntity<?> dogDetails(@PathVariable Long dogId) {
+    public ResponseEntity<DogDetail> dogDetails(@PathVariable final Long dogId) {
         final DogDetail dog = dogService.findDogToDto(dogId);
         return ResponseEntity.ok(dog);
     }
 
     @Operation(summary = "GET 강아지 리스트", description = "강아지 후보를 8개씩 가져오기")
     @GetMapping
-    public ResponseEntity<?> dogList(@PageableDefault(size=8, sort="count", direction = Direction.DESC)
+    public ResponseEntity<List<DogSimple>> dogList(@PageableDefault(size=8, sort="count", direction = Direction.DESC)
                                          Pageable pageable) {
         final List<DogSimple> dogs = dogService.findDogs(pageable);
         return ResponseEntity.ok().body(dogs);

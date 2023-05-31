@@ -27,13 +27,13 @@ public class DogVoteController {
 
     @Operation(summary = "Update 강아지 투표 상태", description = "사용자는 하나의 강아지만 투표할 수 있다")
     @PostMapping("/{dogId}")
-    public ResponseEntity<?> vote(@PathVariable Long dogId,
-                                  @CookieValue(name="vote-cookie", required = false) String voteInfo) {
+    public ResponseEntity<?> vote(@PathVariable final Long dogId,
+                                  @CookieValue(name="vote-cookie", required = false) final String voteInfo) {
         final CookieWithFlag cookieWithFlag = dogService.voteProcess(dogId, voteInfo);
         dogKafkaProducer.sendMessage(dogId, voteInfo, cookieWithFlag.getStatus());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, String.valueOf(cookieWithFlag.getCookie()))
-                .body(cookieWithFlag.getStatus() + ": " + dogId + " vote success");
+                .body(cookieWithFlag.getStatus() + ": " + dogId + " process success");
     }
 }

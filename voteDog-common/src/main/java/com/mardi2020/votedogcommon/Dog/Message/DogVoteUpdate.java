@@ -4,8 +4,10 @@ import com.mardi2020.votedogcommon.Dog.Enum.VoteStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor @Builder
+@NoArgsConstructor
 @Data
 public class DogVoteUpdate {
 

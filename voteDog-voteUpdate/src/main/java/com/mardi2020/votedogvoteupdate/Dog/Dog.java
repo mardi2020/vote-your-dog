@@ -1,7 +1,6 @@
 package com.mardi2020.votedogvoteupdate.Dog;
 
 
-import com.mardi2020.votedogcommon.Dog.Enum.VoteStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

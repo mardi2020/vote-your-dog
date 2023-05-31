@@ -25,19 +25,19 @@ public class DogService {
     private final DogMongoDBRepository dogRepository;
 
     @Cacheable(value = "dog-detail", key = "#dogId", unless = "#result == null")
-    public DogDetail findDogToDto(Long dogId) {
+    public DogDetail findDogToDto(final Long dogId) {
         final Dog dog = findDog(dogId);
         return new DogDetail(dog);
     }
 
     @Cacheable(value = "dog-list", key = "'all'")
-    public List<DogSimple> findDogs(Pageable pageable) {
+    public List<DogSimple> findDogs(final Pageable pageable) {
         final Page<Dog> dogs = dogRepository.findAll(pageable);
         return dogs.stream().map(DogSimple::new)
                 .collect(Collectors.toList());
     }
 
-    public CookieWithFlag voteProcess(Long dogId, String cookieDogId) {
+    public CookieWithFlag voteProcess(final Long dogId, final String cookieDogId) {
         findDog(dogId);
 
         if (cookieDogId == null) {
@@ -51,8 +51,8 @@ public class DogService {
                 CookieUtil.createCookie(dogId.toString()));
     }
 
-    private Dog findDog(Long dogId) {
-        return dogRepository.findByDogId(dogId)
+    private Dog findDog(final Long id) {
+        return dogRepository.findByDogId(id)
                 .orElseThrow(
                         DogNotFoundException::new
                 );

@@ -19,7 +19,7 @@ public class DogKafkaProducer {
 
     private final ObjectMapper mapper;
 
-    private void send(String topic, DogVoteUpdate data) {
+    private void send(final String topic, final DogVoteUpdate data) {
         String message;
         try {
             message = mapper.writeValueAsString(data);
@@ -31,7 +31,9 @@ public class DogKafkaProducer {
         log.info("Kafka produces message: " + message);
     }
 
-    public void sendMessage(Long newDogId, String beforeDogId, VoteStatus status) {
+    public void sendMessage(final Long newDogId,
+                            final String beforeDogId,
+                            final VoteStatus status) {
         DogVoteUpdate dogVoteUpdate = DogVoteUpdate.builder()
                 .newDogId(newDogId)
                 .beforeDogId(beforeDogId == null ? null : Long.valueOf(beforeDogId))

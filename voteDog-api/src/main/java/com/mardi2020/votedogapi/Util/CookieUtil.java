@@ -14,7 +14,7 @@ public final class CookieUtil {
         return ResponseCookie.from(COOKIE_NAME, value)
                 .httpOnly(true)
                 .secure(false)
-                .path("/vote")
+                .path("/votes")
                 .maxAge(EXPIRED_TIME)
                 .build();
     }
@@ -22,7 +22,7 @@ public final class CookieUtil {
     public static ResponseCookie removeCookie() {
         return ResponseCookie.from(COOKIE_NAME, "")
                 .maxAge(0)
-                .path("/vote")
+                .path("/votes")
                 .build();
     }
 
