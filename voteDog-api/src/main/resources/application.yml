@@ -15,3 +15,6 @@ springdoc:
   paths-to-match:
     - /dogs/**
     - /votes/**
+
+server:
+  forward-headers-strategy: framework
