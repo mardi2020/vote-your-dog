@@ -29,6 +29,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(errorCode);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> serverError(final Exception e) {
+        log.warn("handling exception: ", e);
+        final CommonErrorCode internalServerError = CommonErrorCode.INTERNAL_SERVER_ERROR;
+        return handleExceptionInternal(internalServerError);
+    }
+
     private ResponseEntity<Object> handleExceptionInternal(final ErrorCode errorCode) {
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(new ErrorResponse(
