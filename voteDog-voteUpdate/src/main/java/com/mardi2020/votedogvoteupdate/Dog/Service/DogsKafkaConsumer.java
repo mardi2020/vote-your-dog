@@ -1,7 +1,5 @@
 package com.mardi2020.votedogvoteupdate.Dog.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mardi2020.votedogcommon.Dog.Enum.VoteStatus;
 import com.mardi2020.votedogcommon.Dog.Exception.DogNotFoundException;
 import com.mardi2020.votedogcommon.Dog.Message.DogParam;
@@ -12,6 +10,7 @@ import com.mardi2020.votedogvoteupdate.Dog.Repository.DogRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +20,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DogsKafkaConsumer {
 
-    private final ObjectMapper mapper;
-
     private final DogRepository dogRepository;
 
     private final DogKafkaProducer dogKafkaProducer;
 
-    @KafkaListener(topics = KafkaTopic.VOTE_BEFORE)
-    public void modifyDog(String message) throws JsonProcessingException {
-        final DogVoteUpdate data = mapper.readValue(message, DogVoteUpdate.class);
+    @KafkaListener(topics = KafkaTopic.VOTE_BEFORE,
+            containerFactory = "dogVoteUpdateConcurrentKafkaListenerContainerFactory")
+    public void modifyDog(final ConsumerRecord<String, DogVoteUpdate> record) {
+        final DogVoteUpdate data = record.value();
         final VoteStatus status = data.getStatus();
         DogParam dogParam = new DogParam(status, data.getNewDogId(), data.getBeforeDogId());
 
