@@ -19,3 +19,4 @@ API 명세서 URL: [here](https://vote-your-dog.ngrok.app/swagger-ui/index.html#
 
 ### 회고
 - 마무리 회고: [here](https://mardi-2020.notion.site/Numble-dd3a1a9df6fe4994945a491a377e1519)
+- 기술 적용기: [here](https://mardi-2020.notion.site/134bdd5f8c6c4c21bd73444fa964cde1?v=937bae13201c44eda04f04a165235f4e)
