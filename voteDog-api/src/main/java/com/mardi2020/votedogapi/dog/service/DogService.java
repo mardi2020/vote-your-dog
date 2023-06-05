@@ -27,13 +27,13 @@ public class DogService {
     @Cacheable(value = "dog-detail", key = "#dogId", unless = "#result == null")
     public DogDetail findDogToDto(final Long dogId) {
         final Dog dog = findDog(dogId);
-        return new DogDetail(dog);
+        return DogDetail.of(dog);
     }
 
     @Cacheable(value = "dog-list", key = "'all'")
     public List<DogSimple> findDogs(final Pageable pageable) {
         final Page<Dog> dogs = dogRepository.findAll(pageable);
-        return dogs.stream().map(DogSimple::new)
+        return dogs.stream().map(DogSimple::of)
                 .collect(Collectors.toList());
     }
 
