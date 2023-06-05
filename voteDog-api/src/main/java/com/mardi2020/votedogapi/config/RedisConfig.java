@@ -1,11 +1,9 @@
 package com.mardi2020.votedogapi.config;
 
 import java.time.Duration;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -17,9 +15,8 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 @Configuration
-@RequiredArgsConstructor
 @Slf4j
-public class RedisConfig extends CachingConfigurerSupport {
+public class RedisConfig {
 
     @Value("${spring.data.redis.host}")
     private String host;
@@ -36,7 +33,6 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     @Bean
-    @Override
     public CacheManager cacheManager() {
         RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.
                 RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory());
