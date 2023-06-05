@@ -30,10 +30,10 @@ public class DogVoteController {
     public ResponseEntity<?> vote(@PathVariable final Long dogId,
                                   @CookieValue(name="vote-cookie", required = false) final String voteInfo) {
         final CookieWithFlag cookieWithFlag = dogService.voteProcess(dogId, voteInfo);
-        dogKafkaProducer.sendMessage(dogId, voteInfo, cookieWithFlag.getStatus());
+        dogKafkaProducer.sendMessage(dogId, voteInfo, cookieWithFlag.status());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.SET_COOKIE, String.valueOf(cookieWithFlag.getCookie()))
-                .body(cookieWithFlag.getStatus() + ": " + dogId + " process success");
+                .header(HttpHeaders.SET_COOKIE, String.valueOf(cookieWithFlag.cookie()))
+                .body(cookieWithFlag.status() + ": " + dogId + " process success");
     }
 }

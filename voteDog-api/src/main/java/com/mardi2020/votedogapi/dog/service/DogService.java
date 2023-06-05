@@ -59,12 +59,5 @@ public class DogService {
     }
 
     public record CookieWithFlag(VoteStatus status, ResponseCookie cookie) {
-        public VoteStatus getStatus() {
-            return this.status;
-        }
-
-        public ResponseCookie getCookie() {
-            return this.cookie;
-        }
     }
 }
