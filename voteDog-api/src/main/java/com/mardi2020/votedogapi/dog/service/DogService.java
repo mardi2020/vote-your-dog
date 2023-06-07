@@ -24,13 +24,14 @@ public class DogService {
 
     private final DogMongoDBRepository dogRepository;
 
-    @Cacheable(value = "dog-detail", key = "#dogId", unless = "#result == null")
+    @Cacheable(value = "dog-detail", key = "#dogId",
+            cacheManager = "cacheManager", unless = "#result == null")
     public DogDetail findDogToDto(final Long dogId) {
         final Dog dog = findDog(dogId);
         return DogDetail.of(dog);
     }
 
-    @Cacheable(value = "dog-list", key = "'all'")
+    @Cacheable(value = "dog-list", key = "'all'", cacheManager = "cacheManager")
     public List<DogSimple> findDogs(final Pageable pageable) {
         final Page<Dog> dogs = dogRepository.findAll(pageable);
         return dogs.stream().map(DogSimple::of)
