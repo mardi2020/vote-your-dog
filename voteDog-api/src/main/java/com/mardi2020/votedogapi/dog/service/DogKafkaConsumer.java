@@ -22,7 +22,7 @@ public class DogKafkaConsumer {
 
     private final DogMongoDBRepository dogRepository;
 
-    @CacheEvict(value = "dog-list", key = "'all'")
+    @CacheEvict(value = "dog-list", key = "'all'", cacheManager = "cacheManager")
     @KafkaListener(topics = KafkaTopic.VOTE_AFTER,
             containerFactory = "voteKafkaListenerContainerFactory")
     public void handleCount(final ConsumerRecord<String, DogParam> consumerRecord) {
@@ -35,7 +35,7 @@ public class DogKafkaConsumer {
         }
     }
 
-    @CachePut(value = "dog-update", key = "#dogInfo.dogId")
+    @CachePut(value = "dog-update", key = "#dogInfo.dogId", cacheManager = "cacheManager")
     public Dog updateDogCount(final DogInfo dogInfo) {
         final Dog dog = dogRepository.findByDogId(dogInfo.getDogId())
                 .orElseThrow(DogNotFoundException::new);
