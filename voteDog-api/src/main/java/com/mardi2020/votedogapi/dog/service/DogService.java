@@ -40,16 +40,7 @@ public class DogService {
 
     public CookieWithFlag voteProcess(final Long dogId, final String cookieDogId) {
         findDog(dogId);
-
-        if (cookieDogId == null) {
-            return new CookieWithFlag(VoteStatus.INIT,
-                    CookieUtil.createCookie(dogId.toString()));
-        }
-        if (dogId.equals(Long.valueOf(cookieDogId))) {
-            return new CookieWithFlag(VoteStatus.CANCEL, CookieUtil.removeCookie());
-        }
-        return new CookieWithFlag(VoteStatus.ANOTHER,
-                CookieUtil.createCookie(dogId.toString()));
+        return handleVoteStatus(dogId, cookieDogId);
     }
 
     private Dog findDog(final Long id) {
@@ -59,6 +50,24 @@ public class DogService {
                 );
     }
 
+    private CookieWithFlag handleVoteStatus(final Long dogId, final String cookieDogId) {
+        if (cookieDogId == null) {
+            return CookieWithFlag.of(VoteStatus.INIT, dogId);
+        }
+        else if (dogId.equals(Long.valueOf(cookieDogId))) {
+            return CookieWithFlag.from(VoteStatus.CANCEL);
+        }
+        return CookieWithFlag.of(VoteStatus.ANOTHER, dogId);
+    }
+
     public record CookieWithFlag(VoteStatus status, ResponseCookie cookie) {
+        public static CookieWithFlag of(VoteStatus status, Long dogId) {
+            return new CookieWithFlag(status,
+                    CookieUtil.createCookie(dogId.toString()));
+        }
+
+        public static CookieWithFlag from(VoteStatus status) {
+            return new CookieWithFlag(status, CookieUtil.removeCookie());
+        }
     }
 }
