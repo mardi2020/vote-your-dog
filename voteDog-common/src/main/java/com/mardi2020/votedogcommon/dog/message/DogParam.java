@@ -18,10 +18,10 @@ public class DogParam {
 
     private DogInfo beforeDog;
 
-    public DogParam(VoteStatus status, Long newDogId, Long beforeDogId) {
-        this.voteStatus = status;
-        this.newDog = new DogInfo(newDogId);
-        this.beforeDog = new DogInfo(beforeDogId);
+    public DogParam(DogVoteUpdate update) {
+        this.voteStatus = update.getStatus();
+        this.newDog = new DogInfo(update.getNewDogId());
+        this.beforeDog = new DogInfo(update.getBeforeDogId());
     }
 
     public void setBeforeDogCount(int count) {
